@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Responsive Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main-ui">
+      <div class="topbar">
+        <button class="menu-btn" id="aiBtn" title="Play vs AI">
+          Enable AI
+        </button>
+        <button class="menu-btn" id="newGameBtn" title="Start a new round">
+          New Game
+        </button>
+        <button
+          class="menu-btn"
+          id="restartBtn"
+          title="Restart with new players"
+        >
+          Restart
+        </button>
+      </div>
+
+      <div class="score-row">
+        <div class="score-card" id="score1">
+          <div class="score-title">
+            <span id="name1">Player 1</span> (<span class="symbol" id="symbol1"
+              >X</span
+            >)
+          </div>
+          <div class="score">0</div>
+        </div>
+        <div class="game-board" id="board"></div>
+        <div class="score-card" id="score2">
+          <div class="score-title">
+            <span id="name2">Player 2</span> (<span class="symbol" id="symbol2"
+              >O</span
+            >)
+          </div>
+          <div class="score">0</div>
+        </div>
+      </div>
+      <div class="round-info">
+        Rounds Played: <span id="roundCount">0</span>
+      </div>
+    </div>
+
+    <!-- Side Title -->
+    <div class="side-title">
+      <div class="main-title">
+        THE<br /><span class="large">TIC–TAC–TOE</span>
+        <span class="bold">GAME</span>
+      </div>
+    </div>
+
+    <!-- Name Modal -->
+    <div class="name-modal-overlay" id="nameModalOverlay">
+      <div class="name-modal">
+        <div class="modal-title">Enter Player Names</div>
+        <input
+          type="text"
+          id="player1Input"
+          class="name-input"
+          placeholder="Player 1 Name"
+          autocomplete="off"
+        />
+        <input
+          type="text"
+          id="player2Input"
+          class="name-input"
+          placeholder="Player 2 Name"
+          autocomplete="off"
+        />
+        <button id="nameConfirmBtn" class="modal-confirm-btn">
+          Start Game
+        </button>
+      </div>
+    </div>
+
+    <!-- Player vs Computer Graphic -->
+    <div class="vs-graphic-overlay" id="vsGraphicOverlay" style="display: none">
+      <div class="vs-graphic">
+        <div class="player-label">
+          <span class="player-symbol X">X</span>
+          <span class="player-name" id="vsPlayerName">Player 1</span>
+        </div>
+        <div class="vs-text">VS</div>
+        <div class="player-label">
+          <span class="player-symbol O">O</span>
+          <span class="player-name">Computer</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Winner Modal -->
+    <div class="winner-modal-overlay" id="winnerModalOverlay">
+      <div class="name-modal">
+        <div class="modal-title" id="winnerMessage"></div>
+        <button id="winnerOkBtn" class="modal-confirm-btn">OK</button>
+      </div>
+    </div>
+
+    <!-- AI Difficulty Modal -->
+    <div class="ai-modal-overlay" id="aiModalOverlay">
+      <div class="name-modal">
+        <div class="modal-title">Choose AI Difficulty</div>
+        <div class="ai-radio-list">
+          <label class="ai-radio">
+            <input type="radio" name="aiDifficulty" value="normal" checked />
+            <span class="custom-radio"></span>
+            Normal
+          </label>
+          <label class="ai-radio">
+            <input type="radio" name="aiDifficulty" value="medium" />
+            <span class="custom-radio"></span>
+            Medium
+          </label>
+          <label class="ai-radio">
+            <input type="radio" name="aiDifficulty" value="hard" />
+            <span class="custom-radio"></span>
+            Hard
+          </label>
+        </div>
+        <button
+          id="aiStartBtn"
+          class="modal-confirm-btn"
+          style="margin-top: 18px"
+        >
+          Start Game
+        </button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

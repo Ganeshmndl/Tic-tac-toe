@@ -1,0 +1,633 @@
+/* Your CSS from above — unchanged */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  background: linear-gradient(120deg, #fcefcf 0%, #db3f3f 80%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #3d2c2c;
+}
+.main-ui {
+  background: #c2352b;
+  border-radius: 32px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.16);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  min-width: 320px;
+}
+.topbar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.menu-btn {
+  background: linear-gradient(145deg, #ff884d 0%, #db4a3a 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 18px;
+  padding: 14px 32px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+.menu-btn:hover,
+.menu-btn:focus {
+  background: linear-gradient(145deg, #db4a3a 0%, #ff884d 100%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  outline: none;
+}
+.score-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  gap: 16px;
+}
+.score-card {
+  background: linear-gradient(145deg, #ffb14c, #db5500);
+  border-radius: 28px;
+  flex: 1 1 120px;
+  padding: 20px 15px 18px 15px;
+  text-align: center;
+  margin: 0 10px;
+  box-shadow: inset 0 3px 6px rgba(255, 255, 255, 0.4),
+    0 3px 12px rgba(0, 0, 0, 0.26);
+  color: #280b04;
+  user-select: none;
+  transition: box-shadow 0.3s ease;
+}
+.score-card.active {
+  box-shadow: inset 0 10px 20px rgba(255, 255, 255, 0.6),
+    0 5px 15px rgba(0, 0, 0, 0.4), 0 0 10px 3px #ffbf80;
+}
+.score-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.symbol {
+  font-weight: 900;
+  font-size: 1.5rem;
+  background: #fff5eb;
+  color: #c2352b;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.8),
+    0 1px 3px rgba(0, 0, 0, 0.25);
+  user-select: none;
+}
+.score {
+  font-size: 48px;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(145deg, #d83a11, #720f01);
+  border-radius: 24px;
+  margin-top: 8px;
+  min-width: 70px;
+  height: 58px;
+  line-height: 58px;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  user-select: none;
+}
+.round-info {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fcdbb2;
+  text-align: center;
+  margin-top: -8px;
+  margin-bottom: 12px;
+  user-select: none;
+  letter-spacing: 0.8px;
+  font-style: italic;
+}
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(clamp(70px, 25vw, 140px), 1fr));
+  grid-template-rows: repeat(3, minmax(clamp(70px, 25vw, 140px), 1fr));
+  gap: 14px;
+  background: #ab5f25;
+  border-radius: 30px;
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  box-shadow: inset 0 8px 15px rgba(255, 255, 255, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.cell {
+  background: linear-gradient(145deg, #6a1f1f, #3d0f0f);
+  border-radius: 20px;
+  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.15),
+    inset -2px -2px 8px rgba(0, 0, 0, 0.75);
+  border: 2px solid #8c2e2e;
+  font-weight: 900;
+  font-size: clamp(28px, 8vw, 80px);
+  color: #ffefd3;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.15s ease;
+  outline-offset: -4px;
+  outline: none;
+}
+.cell:focus-visible {
+  outline: 3px solid #ffb23f;
+  outline-offset: 0;
+}
+.cell:hover:not(:disabled) {
+  background: linear-gradient(145deg, #854242, #5f1d1d);
+  color: #fff3e5;
+  transform: scale(1.06);
+}
+.cell:active:not(:disabled) {
+  transform: scale(1.02);
+}
+.cell:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.cell.highlight {
+  background: linear-gradient(145deg, #ffd27b, #c2352b);
+  color: #6b1a00 !important;
+  border-color: #ef9f3d;
+  box-shadow: 0 0 20px 3px #ffbf70;
+}
+.side-title {
+  position: absolute;
+  right: 40px;
+  top: 10%;
+  text-align: right;
+  margin-top: 0;
+  z-index: 10;
+  max-width: 600px;
+  user-select: none;
+}
+.main-title {
+  color: #c2352b;
+  font-size: 86px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 2.4px;
+  word-break: break-word;
+  text-shadow: 0 0 3px #9e2d29;
+}
+.main-title .large {
+  font-size: 122px;
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1.02;
+  display: block;
+  text-shadow: 0 0 8px #ff8f54;
+}
+.main-title .bold {
+  color: #661819;
+  font-size: 86px;
+  font-weight: 900;
+  display: block;
+  text-shadow: 0 0 5px #502516;
+}
+.name-modal-overlay,
+.winner-modal-overlay,
+.help-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(40, 20, 8, 0.33);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 220;
+}
+.name-modal {
+  background: #fffaf0;
+  border-radius: 28px;
+  box-shadow: 0 10px 40px rgba(220, 80, 50, 0.25);
+  padding: 36px 30px;
+  width: 90vw;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+.modal-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #c2352b;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 1.2px;
+  user-select: none;
+}
+.name-input {
+  border: 2.5px solid #db3f3f;
+  background: #fff3e0;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.name-input::placeholder {
+  color: #b46c54;
+}
+.name-input:focus {
+  border-color: #ff8c3d;
+  background: #fff8ee;
+}
+.modal-confirm-btn {
+  background: linear-gradient(145deg, #db3f3f, #aa2e2e);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 900;
+  border: none;
+  border-radius: 16px;
+  padding: 16px 0;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  margin-top: 10px;
+}
+.modal-confirm-btn:hover,
+.modal-confirm-btn:focus {
+  background: linear-gradient(145deg, #ff7f32, #f35d1f);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+.help-modal-overlay p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3e2a22;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  user-select: none;
+}
+.name-input:focus-visible,
+.modal-confirm-btn:focus-visible {
+  outline: 3px solid #ffae40;
+  outline-offset: 3px;
+}
+@media (max-width: 900px) {
+  .side-title {
+    position: static;
+    margin: 30px auto 10px auto;
+    text-align: center;
+    max-width: 90vw;
+  }
+  .main-title {
+    font-size: 44px;
+  }
+  .main-title .large {
+    font-size: 48px;
+  }
+  .main-title .bold {
+    font-size: 44px;
+  }
+}
+/* Mobile general adjustments for OnePlus Nord CE 5G, Samsung S23, Redmi typical resolutions */
+@media (max-width: 480px) {
+  .main-ui {
+    width: 95vw;
+    padding: 16px 12px;
+    border-radius: 20px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .menu-btn {
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    flex: 1 1 45%;
+    max-width: 48%;
+  }
+
+  .score-row {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .score-card {
+    flex: none;
+    padding: 12px 6px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .score-title {
+    font-size: 1rem;
+  }
+
+  .score {
+    font-size: 36px;
+    min-width: 60px;
+    height: 48px;
+    line-height: 48px;
+  }
+
+  .game-board {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .cell {
+    min-width: 70px;
+    min-height: 70px;
+    font-size: clamp(24px, 7vw, 48px);
+    border-radius: 16px;
+  }
+
+  .round-info {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .side-title {
+    position: static;
+    margin: 20px auto 0 auto;
+    text-align: center;
+    max-width: 90vw;
+  }
+
+  .main-title {
+    font-size: 36px;
+  }
+
+  .main-title .large {
+    font-size: 40px;
+  }
+
+  .main-title .bold {
+    font-size: 36px;
+  }
+}
+
+.ai-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(40, 20, 8, 0.33);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 250;
+}
+.ai-modal-overlay .name-modal label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-right: 4px;
+  color: #c2352b;
+  user-select: none;
+}
+/* ... your existing game CSS here unchanged ... */
+
+/* AI Difficulty Modal */
+.ai-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(40, 20, 8, 0.33);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 250;
+}
+.ai-radio-list {
+  margin: 18px 0 2px 0;
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+}
+.ai-radio {
+  position: relative;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #aa2e2e;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+.ai-radio input[type="radio"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.custom-radio {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid #db3f3f;
+  background: linear-gradient(145deg, #fffaf0 80%, #f7e7da 100%);
+  box-shadow: 0 2px 6px rgba(220, 80, 50, 0.14);
+  display: inline-block;
+  margin-right: 10px;
+  transition: border-color 0.2s, background 0.3s;
+  position: relative;
+}
+.ai-radio input[type="radio"]:checked + .custom-radio {
+  border-color: #ff883d;
+  background: linear-gradient(145deg, #ffd8b2 50%, #ffa65c 100%);
+  box-shadow: 0 0 0 6px #ffe1c2;
+}
+.ai-radio input[type="radio"]:checked + .custom-radio::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #db3f3f;
+  box-shadow: 0 2px 4px #c2352bcc;
+}
+.ai-radio:hover .custom-radio,
+.ai-radio:focus-within .custom-radio {
+  border-color: #ffae40;
+  background: linear-gradient(145deg, #fff4da 70%, #ffd49a 100%);
+  box-shadow: 0 0 0 8px #fff0dac0;
+}
+/* AI Difficulty Modal */
+.ai-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(40, 20, 8, 0.33);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 250;
+}
+.ai-radio-list {
+  margin: 18px 0 2px 0;
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+}
+.ai-radio {
+  position: relative;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #aa2e2e;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+.ai-radio input[type="radio"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.custom-radio {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid #db3f3f;
+  background: linear-gradient(145deg, #fffaf0 80%, #f7e7da 100%);
+  box-shadow: 0 2px 6px rgba(220, 80, 50, 0.14);
+  display: inline-block;
+  margin-right: 10px;
+  transition: border-color 0.2s, background 0.3s;
+  position: relative;
+}
+.ai-radio input[type="radio"]:checked + .custom-radio {
+  border-color: #ff883d;
+  background: linear-gradient(145deg, #ffd8b2 50%, #ffa65c 100%);
+  box-shadow: 0 0 0 6px #ffe1c2;
+}
+.ai-radio input[type="radio"]:checked + .custom-radio::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #db3f3f;
+  box-shadow: 0 2px 4px #c2352bcc;
+}
+.ai-radio:hover .custom-radio,
+.ai-radio:focus-within .custom-radio {
+  border-color: #ffae40;
+  background: linear-gradient(145deg, #fff4da 70%, #ffd49a 100%);
+  box-shadow: 0 0 0 8px #fff0dac0;
+}
+
+/* Player vs Computer Graphic Overlay */
+.vs-graphic-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(40, 20, 8, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+.vs-graphic {
+  background: #fffaf0;
+  border-radius: 24px;
+  padding: 24px 48px;
+  box-shadow: 0 10px 40px rgba(220, 80, 50, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  user-select: none;
+}
+
+.player-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-symbol {
+  font-weight: 900;
+  font-size: 64px;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.player-symbol.X {
+  background-color: #c2352b;
+}
+
+.player-symbol.O {
+  background-color: #db5500;
+}
+
+.player-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #3d2c2c;
+}
+
+.vs-text {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #c2352b;
+  user-select: none;
+}
