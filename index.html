@@ -2,62 +2,87 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Responsive Tic Tac Toe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="main-ui">
-      <div class="topbar">
-        <button class="menu-btn" id="aiBtn" title="Play vs AI">
-          Enable AI
-        </button>
-        <button class="menu-btn" id="newGameBtn" title="Start a new round">
-          New Game
-        </button>
-        <button
-          class="menu-btn"
-          id="restartBtn"
-          title="Restart with new players"
-        >
-          Restart
-        </button>
+    <div class="game-container">
+      <div class="main-ui" id="mainUI">
+        <div class="topbar">
+          <button class="menu-btn" id="aiBtn" title="Play vs AI">
+            Enable AI
+          </button>
+          <button class="menu-btn" id="newGameBtn" title="Start a new round">
+            Custom
+          </button>
+          <button
+            class="menu-btn"
+            id="restartBtn"
+            title="Restart with new players"
+          >
+            Exit
+          </button>
+        </div>
+        <div class="score-row">
+          <div class="score-card" id="score1">
+            <div class="score-title">
+              <span id="name1">Player 1</span> (<span
+                class="symbol"
+                id="symbol1"
+              ></span
+              >)
+            </div>
+            <div class="score">0</div>
+          </div>
+          <div class="game-board" id="board"></div>
+          <div class="score-card" id="score2">
+            <div class="score-title">
+              <span id="name2">Player 2</span> (<span
+                class="symbol"
+                id="symbol2"
+              ></span
+              >)
+            </div>
+            <div class="score">0</div>
+          </div>
+        </div>
+        <div class="round-info">
+          Rounds Played: <span id="roundCount">0</span>
+        </div>
       </div>
 
-      <div class="score-row">
-        <div class="score-card" id="score1">
-          <div class="score-title">
-            <span id="name1">Player 1</span> (<span class="symbol" id="symbol1"
-              >X</span
-            >)
-          </div>
-          <div class="score">0</div>
+      <div class="side-title">
+        <div class="main-title">
+          THE<br /><span class="large">TIC–TAC<br />–TOE</span>
+          <span class="bold">GAME</span>
         </div>
-        <div class="game-board" id="board"></div>
-        <div class="score-card" id="score2">
-          <div class="score-title">
-            <span id="name2">Player 2</span> (<span class="symbol" id="symbol2"
-              >O</span
-            >)
-          </div>
-          <div class="score">0</div>
-        </div>
-      </div>
-      <div class="round-info">
-        Rounds Played: <span id="roundCount">0</span>
       </div>
     </div>
 
-    <!-- Side Title -->
-    <div class="side-title">
-      <div class="main-title">
-        THE<br /><span class="large">TIC–TAC–TOE</span>
-        <span class="bold">GAME</span>
+    <div class="main-menu-overlay" id="mainMenuOverlay">
+      <div class="modal-container">
+        <div class="menu-title">
+          <span class="title-x">X</span><span class="title-o">O</span>
+          <div class="title-sub">Tic-Tac-Toe</div>
+        </div>
+        <button id="menuComputerBtn" class="menu-main-btn">Computer</button>
+        <button id="menuMultiplayerBtn" class="menu-main-btn">
+          Play with Friend
+        </button>
+        <button id="menuSettingsBtn" class="menu-main-btn">Themes</button>
+        <button id="menuProfileBtn" class="menu-main-btn">My Profile</button>
       </div>
     </div>
 
-    <!-- Name Modal -->
     <div class="name-modal-overlay" id="nameModalOverlay">
-      <div class="name-modal">
+      <div class="modal-container">
         <div class="modal-title">Enter Player Names</div>
         <input
           type="text"
@@ -76,11 +101,11 @@
         <button id="nameConfirmBtn" class="modal-confirm-btn">
           Start Game
         </button>
+        <button id="nameBackBtn" class="modal-secondary-btn">Back</button>
       </div>
     </div>
 
-    <!-- Player vs Computer Graphic -->
-    <div class="vs-graphic-overlay" id="vsGraphicOverlay" style="display: none">
+    <div class="vs-graphic-overlay" id="vsGraphicOverlay">
       <div class="vs-graphic">
         <div class="player-label">
           <span class="player-symbol X">X</span>
@@ -94,17 +119,15 @@
       </div>
     </div>
 
-    <!-- Winner Modal -->
     <div class="winner-modal-overlay" id="winnerModalOverlay">
-      <div class="name-modal">
+      <div class="modal-container">
         <div class="modal-title" id="winnerMessage"></div>
         <button id="winnerOkBtn" class="modal-confirm-btn">OK</button>
       </div>
     </div>
 
-    <!-- AI Difficulty Modal -->
     <div class="ai-modal-overlay" id="aiModalOverlay">
-      <div class="name-modal">
+      <div class="modal-container">
         <div class="modal-title">Choose AI Difficulty</div>
         <div class="ai-radio-list">
           <label class="ai-radio">
@@ -130,9 +153,41 @@
         >
           Start Game
         </button>
+        <button id="aiBackBtn" class="modal-secondary-btn">Back</button>
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <div class="name-modal-overlay" id="settingsModalOverlay">
+      <div class="modal-container">
+        <div class="modal-title">Themes</div>
+        <div id="theme-buttons-container"></div>
+        <button
+          id="settingsExitBtn"
+          class="modal-secondary-btn"
+          style="margin-top: 20px"
+        >
+          Back
+        </button>
+      </div>
+    </div>
+
+    <div class="name-modal-overlay" id="profileModalOverlay">
+      <div class="modal-container">
+        <div class="modal-title">My Profile</div>
+        <p
+          style="
+            text-align: center;
+            color: var(--text-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+          "
+        >
+          Player profiles and stats are coming soon!
+        </p>
+        <button id="profileBackBtn" class="modal-confirm-btn">Back</button>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
   </body>
 </html>
