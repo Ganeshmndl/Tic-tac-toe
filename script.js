@@ -18,6 +18,7 @@ const TicTacToe = {
     aiEnabled: false,
     aiDifficulty: "normal",
     gameOver: false,
+    nextRoundStartsPlayer1: true,
     themes: {
       default: "Default",
       light: "Light Mode",
@@ -62,6 +63,40 @@ const TicTacToe = {
     this.nodes.player2Input = document.getElementById("player2Input");
     this.nodes.vsPlayerName = document.getElementById("vsPlayerName");
     this.nodes.aiBtn = document.getElementById("aiBtn");
+  },
+  // --- DATA PERSISTENCE ---
+  loadProgress() {
+    // Load Scores
+    this.state.score1 = parseInt(localStorage.getItem("ttt_score1")) || 0;
+    this.state.score2 = parseInt(localStorage.getItem("ttt_score2")) || 0;
+    this.state.roundsPlayed = parseInt(localStorage.getItem("ttt_rounds")) || 0;
+
+    // Load Names (only if not "Computer")
+    const p1 = localStorage.getItem("ttt_p1");
+    const p2 = localStorage.getItem("ttt_p2");
+    if (p1) this.state.player1Name = p1;
+    if (p2 && p2 !== "Computer") this.state.player2Name = p2;
+
+    // Update UI immediately
+    this.updateScores();
+    this.updateRoundsPlayed();
+    this.nodes.name1.textContent = this.state.player1Name;
+    if (!this.state.aiEnabled) {
+      this.nodes.name2.textContent = this.state.player2Name;
+    }
+    // Prefill inputs
+    this.nodes.player1Input.value = this.state.player1Name;
+    if (this.state.player2Name !== "Computer") {
+      this.nodes.player2Input.value = this.state.player2Name;
+    }
+  },
+
+  saveProgress() {
+    localStorage.setItem("ttt_score1", this.state.score1);
+    localStorage.setItem("ttt_score2", this.state.score2);
+    localStorage.setItem("ttt_rounds", this.state.roundsPlayed);
+    localStorage.setItem("ttt_p1", this.state.player1Name);
+    localStorage.setItem("ttt_p2", this.state.player2Name);
   },
 
   /**
@@ -259,13 +294,18 @@ const TicTacToe = {
       c.removeAttribute("data-symbol");
       c.classList.remove("highlight");
     });
-    this.state.firstPlayerTurn = true;
+    this.state.firstPlayerTurn = this.state.nextRoundStartsPlayer1;
+    this.state.nextRoundStartsPlayer1 = !this.state.nextRoundStartsPlayer1;
     this.state.moveCount = 0;
+    if (this.state.aiEnabled && !this.state.firstPlayerTurn) {
+      setTimeout(() => this.aiMove(), 500);
+    }
   },
 
   updateScores() {
     this.nodes.score1.textContent = this.state.score1;
     this.nodes.score2.textContent = this.state.score2;
+    this.saveProgress();
   },
 
   updateRoundsPlayed() {
@@ -279,6 +319,7 @@ const TicTacToe = {
       : this.nodes.player2Input.value.trim() || "Player 2";
     this.nodes.name1.textContent = this.state.player1Name;
     this.nodes.name2.textContent = this.state.player2Name;
+    this.saveProgress();
     this.hideModal(this.nodes.nameModalOverlay);
     this.nodes.mainUI.style.display = "flex";
     this.resetGame();
@@ -310,6 +351,7 @@ const TicTacToe = {
       'input[name="aiDifficulty"]:checked'
     ).value;
     this.state.aiEnabled = true;
+    this.state.nextRoundStartsPlayer1 = Math.random() < 0.5;
     this.hideModal(this.nodes.aiModalOverlay);
     this.nodes.aiBtn.textContent = "Disable AI";
     this.nodes.name2.textContent = "Computer";
@@ -482,6 +524,7 @@ const TicTacToe = {
    */
   init() {
     this.cacheDOM();
+    this.loadProgress();
     this.bindEvents();
     this.createBoard();
     this.initTheme();
