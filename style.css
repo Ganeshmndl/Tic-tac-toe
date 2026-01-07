@@ -1000,3 +1000,20 @@ body.theme-neon .cell[data-symbol="O"] {
 #theme-buttons-container::-webkit-scrollbar-thumb:hover {
   background: var(--primary-btn-hover-bg);
 }
+/* --- Strike Line Style --- */
+#board {
+  position: relative;
+}
+
+#strikeLine {
+  position: absolute;
+  height: 8px;
+  background-color: #fff;
+  border-radius: 4px;
+  transform-origin: top left;
+  z-index: 10;
+  display: none; /* Hidden by default */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  pointer-events: none; /* Click through it */
+  transition: width 0.2s ease-out;
+}

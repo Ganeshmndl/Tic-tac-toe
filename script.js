@@ -3,6 +3,105 @@
  * Encapsulated to prevent global scope pollution.
  */
 const TicTacToe = {
+  // --- VISUAL: STRIKE LINE ---
+  drawLine(indexA, indexC) {
+    const line = document.getElementById("strikeLine");
+    const boardRect = this.nodes.board.getBoundingClientRect();
+    const cellA = this.state.cells[indexA].getBoundingClientRect();
+    const cellC = this.state.cells[indexC].getBoundingClientRect();
+
+    // Calculate centers of start and end cells
+    const x1 = cellA.left + cellA.width / 2 - boardRect.left;
+    const y1 = cellA.top + cellA.height / 2 - boardRect.top;
+    const x2 = cellC.left + cellC.width / 2 - boardRect.left;
+    const y2 = cellC.top + cellC.height / 2 - boardRect.top;
+
+    // Calculate length and angle
+    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+
+    // Apply styles
+    line.style.width = `${length}px`;
+    line.style.transform = `translate(${x1}px, ${y1}px) rotate(${angle}deg)`;
+    line.style.display = "block";
+
+    // Match line color to the winner's color if you want, or keep it white
+    // line.style.backgroundColor = "white";
+  },
+  // --- VISUAL EFFECTS ---
+  triggerConfetti() {
+    const duration = 1 * 1000;
+    const end = Date.now() + duration;
+
+    const colors = ["#bb0000", "#ffffff", "#ff9900"];
+
+    (function frame() {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors,
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  },
+  // --- AUDIO SYSTEM ---
+  playSound(type) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return; // Browser doesn't support audio
+
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    const now = ctx.currentTime;
+
+    if (type === "move") {
+      // A short, crisp "pop" sound
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+      osc.start(now);
+      osc.stop(now + 0.08);
+    } else if (type === "win") {
+      // A nice "Victory" arpeggio (C Major)
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(523.25, now); // C5
+      osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+      osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+      osc.frequency.setValueAtTime(1046.5, now + 0.3); // C6
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.linearRampToValueAtTime(0, now + 0.6);
+      osc.start(now);
+      osc.stop(now + 0.6);
+    } else if (type === "draw") {
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(200, now);
+      osc.frequency.linearRampToValueAtTime(60, now + 0.6);
+
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.linearRampToValueAtTime(0, now + 0.6);
+
+      osc.start(now);
+      osc.stop(now + 0.6);
+    }
+  },
   // --- STATE ---
   state: {
     player1Name: "Player 1",
@@ -232,7 +331,11 @@ const TicTacToe = {
 
   // --- GAMEPLAY LOGIC ---
   createBoard() {
+    // Clear only buttons, keep the strikeLine
+    const existingLine = document.getElementById("strikeLine");
     this.nodes.board.innerHTML = "";
+    this.nodes.board.appendChild(existingLine); // Put it back
+
     this.state.cells = [];
     for (let i = 0; i < 9; i++) {
       const cell = document.createElement("button");
@@ -271,6 +374,7 @@ const TicTacToe = {
         this.state.cells[index].textContent = currentSymbol;
       }
       this.state.cells[index].setAttribute("data-symbol", symbolKey);
+      this.playSound("move");
 
       this.state.moveCount++;
       this.state.firstPlayerTurn = !this.state.firstPlayerTurn;
@@ -288,6 +392,8 @@ const TicTacToe = {
   },
 
   resetGame() {
+    const line = document.getElementById("strikeLine");
+    if (line) line.style.display = "none";
     this.state.gameOver = false;
     this.state.cells.forEach((c) => {
       c.textContent = "";
@@ -392,6 +498,9 @@ const TicTacToe = {
         [this.state.cells[a], this.state.cells[b], this.state.cells[c]].forEach(
           (cell) => cell.classList.add("highlight")
         );
+        this.drawLine(a, c);
+        this.triggerConfetti();
+        this.playSound("win");
         const winner =
           symbolA === "X" ? this.state.player1Name : this.state.player2Name;
         this.nodes.winnerMessage.textContent = `${winner} won the game!`;
@@ -410,6 +519,7 @@ const TicTacToe = {
       this.updateRoundsPlayed();
       this.nodes.winnerMessage.textContent = "It's a Draw!";
       setTimeout(() => this.showModal(this.nodes.winnerModalOverlay), 300);
+      this.playSound("draw");
       return true;
     }
     return false;

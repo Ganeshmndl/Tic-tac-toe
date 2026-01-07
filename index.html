@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -41,7 +42,9 @@
             </div>
             <div class="score">0</div>
           </div>
-          <div class="game-board" id="board"></div>
+          <div class="game-board" id="board">
+            <div id="strikeLine"></div>
+          </div>
           <div class="score-card" id="score2">
             <div class="score-title">
               <span id="name2">Player 2</span> (<span
